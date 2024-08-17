@@ -12,21 +12,9 @@ import Cookie from 'js-cookie';
 import { useToast } from "@/components/ui/use-toast";
 import { Spinner } from "@/components/ui/spinner";
 import { useCart } from "@/contexts/CartContext";
+import { ProductProps } from "@/props/ProductProps";
+import Image from "next/image";
 
-interface ProductProps {
-  _id: string;
-  productId: string;
-  name: string;
-  description: string;
-  priceLevels: Record<string, number>;
-  category: string;
-  images: string[];
-  sizes: string[];
-  stockLevels: Map<string, number>;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
 
 interface CartCookieItem {
   productId: string;
@@ -88,6 +76,7 @@ export function IndividualProduct({ product }: ProductState) {
     toast({
       title: 'Added to Cart',
       description: `${productDisplay.name} (${selectedSize}) x ${selectedQuantity} added to cart.`,
+      duration: 2000,
     });
 
     setIsAddingToCart(false);
@@ -108,7 +97,7 @@ export function IndividualProduct({ product }: ProductState) {
               <CarouselContent>
                 {product.images.map((image, index) => (
                   <CarouselItem key={index}>
-                    <img
+                    <Image
                       src={image}
                       alt={`Product Image ${index + 1}`}
                       width={600}

@@ -20,7 +20,7 @@ interface ProductIdProps {
 }
 
 export function EditProduct({ productId }: ProductIdProps) {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [product, setProduct] = useState<ProductProps>({
     _id: '',
     productId: '',
@@ -117,6 +117,7 @@ export function EditProduct({ productId }: ProductIdProps) {
         // variant: "success",
         title: "Product updated successfully!",
         description: "Your changes have been saved.",
+        duration: 2000,
       });
       console.log("Product updated successfully:", result);
     } else {
@@ -124,6 +125,7 @@ export function EditProduct({ productId }: ProductIdProps) {
         variant: "destructive",
         title: "Error!",
         description: "Try again",
+        duration: 2000,
       });
       console.log("Failed to update product");
     }

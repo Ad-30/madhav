@@ -17,6 +17,7 @@ import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 import { TrashIcon } from "./ui/icons";
 import { useCart } from "@/contexts/CartContext";
+import Image from "next/image";
 
 
 interface CartItem {
@@ -137,7 +138,7 @@ export function Cart() {
                       className={`relative grid md:grid-cols-[100px_1fr_100px_100px] items-center gap-4 border-b pb-4 ${isOutOfStock ? "opacity-50 pointer-events-none" : ""
                         }`}
                     >
-                      <img
+                      <Image
                         src={item.imageUrl || "/placeholder.svg"}
                         alt={item.name}
                         width={100}

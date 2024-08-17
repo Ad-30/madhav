@@ -37,16 +37,20 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { EditProduct } from './edit-product';
+import { deleteProductById } from '@/actions/deleteIndividualProduct';
+import { useToast } from "@/components/ui/use-toast";
+
 
 interface Product {
   src: string;
-  id?: string;
+  id: string;
   name: string;
   category: string;
   price: string;
   totalStock: string;
 }
 export function Inventory() {
+  const { toast } = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -55,6 +59,7 @@ export function Inventory() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
 
   const openDialog = (productId: string) => {
     setSelectedProductId(productId);
@@ -62,7 +67,7 @@ export function Inventory() {
   };
 
   const openAlertDialog = (productId: string) => {
-    setSelectedProductId(productId);
+    setDeletingProductId(productId);
     setIsAlertDialogOpen(true);
   };
 
@@ -73,7 +78,25 @@ export function Inventory() {
 
   const closeAlertDialog = () => {
     setIsAlertDialogOpen(false);
-    setSelectedProductId(null);
+    setDeletingProductId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deletingProductId) {
+      const success = await deleteProductById(deletingProductId);
+
+      if (success) {
+        setAllProducts(prevProducts => prevProducts.filter(product => product.id !== deletingProductId));
+        closeAlertDialog();
+        fetchAllProducts(currentPage);
+        toast({
+          title: "Product deleted successfully!",
+          duration: 2000,
+        });
+      } else {
+        console.error("Failed to delete the product.");
+      }
+    }
   };
 
   const fetchAllProducts = async (page: number) => {
@@ -270,7 +293,7 @@ export function Inventory() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel onClick={closeAlertDialog}>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={closeAlertDialog}>Continue</AlertDialogAction>
+                      <AlertDialogAction onClick={handleConfirmDelete}>Continue</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

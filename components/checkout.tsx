@@ -108,6 +108,7 @@ export function Checkout() {
         variant: "destructive",
         title: "Error",
         description: "Customer Name is required!",
+        duration: 2000,
       });
       setIsCreatingOrder(false);
       return;
@@ -118,6 +119,7 @@ export function Checkout() {
         variant: "destructive",
         title: "Error",
         description: "Address is required!",
+        duration: 2000,
       });
       setIsCreatingOrder(false);
       return;

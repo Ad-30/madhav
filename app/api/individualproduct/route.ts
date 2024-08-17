@@ -88,3 +88,42 @@ export const PUT = async (request: Request): Promise<NextResponse> => {
         );
     }
 };
+
+export const DELETE = async (request: Request): Promise<NextResponse> => {
+    try {
+        await connectToDb();
+
+        const { searchParams } = new URL(request.url);
+        const productId = searchParams.get('id');
+
+        if (!productId) {
+            return NextResponse.json({
+                success: false,
+                message: "Product id is required",
+            }, { status: 400 });
+        }
+
+        const product = await Product.findOne({ productId });
+
+        if (!product) {
+            return NextResponse.json({
+                success: false,
+                message: "Product not found",
+            }, { status: 404 });
+        }
+
+        await Product.deleteOne({ productId });
+
+        return NextResponse.json({
+            success: true,
+            message: "Product deleted successfully",
+        });
+
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return NextResponse.json(
+            { success: false, error: 'Internal Server Error' },
+            { status: 500 }
+        );
+    }
+};
