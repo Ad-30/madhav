@@ -2,32 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 60 100% 97%; /* Ivory */
+    --foreground: 0 100% 0%; /* Deep Maroon */
+    --primary: 0 100% 25%; /* Deep Maroon */
+    --primary-foreground: 60 100% 97%; /* Ivory */
+    --secondary: 51 100% 50%; /* Gold */
+    --secondary-foreground: 0 100% 25%; /* Deep Maroon */
+    --accent: 14 100% 62%; /* Saffron */
+    --accent-foreground: 60 100% 97%; /* Ivory */
+    --destructive: 14 100% 62%; /* Saffron */
+    --destructive-foreground: 0 100% 25%; /* Deep Maroon */
+    --muted: 33 56% 77%; /* Soft Sand */
+    --muted-foreground: 0 100% 25%; /* Deep Maroon */
+    --card: 33 56% 77%; /* Soft Sand */
+    --card-foreground: 0 100% 25%; /* Deep Maroon */
+    --popover: 60 100% 97%; /* Ivory */
+    --popover-foreground: 0 100% 25%; /* Deep Maroon */
+    --border: 51 100% 50%; /* Gold */
+    --input: 33 56% 77%; /* Soft Sand */
+    --ring: 51 100% 50%; /* Gold */
+    --radius: 1rem;
+    --status-pending: 44 100% 68%; /* Yellowish for Pending */
+    --status-pending-foreground: 0 0% 10%; /* Dark Foreground for Pending */
+    --status-cancelled: 0 93% 62%; /* Red for Cancelled */
+    --status-cancelled-foreground: 60 100% 97%; /* Ivory Foreground for Cancelled */
+    --status-delivered: 120 61% 70%; /* Light Green for Delivered */
+    --status-delivered-foreground: 60 100% 97%; /* Ivory Foreground for Delivered */
+    --status-shipped: 240 71% 65%; /* Light Blue for Shipped */
+    --status-shipped-foreground: 60 100% 97%; /* Ivory Foreground for Shipped */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
