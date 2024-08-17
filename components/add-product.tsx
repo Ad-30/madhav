@@ -148,7 +148,9 @@ function AddProduct() {
         images: imageUrls,
       });
       toast({
-        description: "Sucessfully Added New Item.",
+        // variant: "success",
+        title: "Cheers!",
+        description: "Sucessfully Added New Product.",
       })
       // console.log(response.data);
     } catch (error) {
@@ -200,7 +202,6 @@ function AddProduct() {
           <div className="grid gap-2">
             <Label htmlFor="product-category">Category</Label>
             <Select
-              id="product-category"
               value={productCategory}
               onValueChange={(value) => setProductCategory(value)}
             >

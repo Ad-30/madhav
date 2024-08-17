@@ -32,6 +32,8 @@
     --status-delivered-foreground: 60 100% 97%; /* Ivory Foreground for Delivered */
     --status-shipped: 240 71% 65%; /* Light Blue for Shipped */
     --status-shipped-foreground: 60 100% 97%; /* Ivory Foreground for Shipped */
+    --success-background: hsl(120, 100%, 75%); /* Example green background */
+    --success-foreground: hsl(0, 0%, 100%); /* Example white text color */
   }
 
   .dark {

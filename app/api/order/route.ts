@@ -84,16 +84,13 @@ export const GET = async (request: Request) => {
     try {
         await connectToDb();
 
-        // Parse orderId from the request URL
         const url = new URL(request.url);
         const orderId = url.searchParams.get('orderId');
 
-        // Check if orderId is provided
         if (!orderId) {
             return NextResponse.json({ error: 'No orderId provided' }, { status: 400 });
         }
 
-        // Find order by orderId
         const order = await Order.findOne({ orderId });
 
         if (!order) {

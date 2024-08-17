@@ -9,11 +9,11 @@ interface ProductProps {
     productId: string;
     name: string;
     description: string;
-    price: Record<string, number>;
+    priceLevels: Record<string, number>;
     category: string;
     images: string[];
     sizes: string[];
-    stockLevels: Map<string, number>;
+    stockLevels: Record<string, number>;
     createdAt: string;
     updatedAt: string;
     __v: number;
