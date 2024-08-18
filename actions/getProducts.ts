@@ -18,7 +18,7 @@ interface Product {
 
 interface FetchProductsResponse {
     data: Product[];
-    totalItems: number; // Include totalItems to match the new response format
+    totalItems: number;
 }
 
 export const getProducts = async ({
@@ -38,6 +38,6 @@ export const getProducts = async ({
         return response.data;
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-        throw error; // or return a default value
+        throw error;
     }
 };

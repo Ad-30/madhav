@@ -8,6 +8,8 @@ import { getProducts } from "@/actions/getProducts";
 import { useInView } from 'react-intersection-observer';
 import { Spinner } from "./ui/spinner";
 import BlurFade from "@/components/magicui/blur-fade";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu"
+import { ChevronDownIcon } from "lucide-react";
 
 interface Product {
   src: string;
@@ -16,7 +18,6 @@ interface Product {
   category: string;
   price: string;
   totalStock: string;
-  alt: string;
 }
 
 interface ProductsProps {
@@ -29,6 +30,7 @@ export function Products({ products, totalItems }: ProductsProps) {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>(products);
   const [offset, setOffset] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow' | 'featured' | ''>(''); // Updated sortOrder with 'featured'
   const [filters, setFilters] = useState({
     inStock: false,
     outOfStock: false,
@@ -52,7 +54,7 @@ export function Products({ products, totalItems }: ProductsProps) {
     try {
       const response = await getProducts({ offset, limit: 16, category });
       if (response.data.length === 0) {
-        setOffset(totalItems); // Prevent further fetches if no data
+        setOffset(totalItems);
       } else {
         setAllProducts(prevProducts => [...prevProducts, ...response.data]);
         setDisplayedProducts(prevProducts => [...prevProducts, ...response.data]);
@@ -65,37 +67,46 @@ export function Products({ products, totalItems }: ProductsProps) {
     }
   };
 
+  const applyFiltersAndSearch = () => {
+    let filteredProducts = [...allProducts];
+
+    // Apply filters
+    if (filters.inStock || filters.outOfStock) {
+      filteredProducts = filteredProducts.filter(p => {
+        const isInStock = parseInt(p.totalStock) > 0;
+        return (filters.inStock && isInStock) || (filters.outOfStock && !isInStock);
+      });
+    }
+
+    if (filters.poshak || filters.accessories || filters.pujaItems) {
+      filteredProducts = filteredProducts.filter(p => {
+        const categoryMatch = (filters.poshak && p.category === 'Poshak') ||
+          (filters.accessories && p.category === 'Accessories') ||
+          (filters.pujaItems && p.category === 'Puja Items');
+        return categoryMatch;
+      });
+    }
+
+    // Apply search term
+    if (searchTerm) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (sortOrder === 'lowToHigh') {
+      filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortOrder === 'highToLow') {
+      filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+
+    setDisplayedProducts(filteredProducts);
+  };
+
   useEffect(() => {
-    const applyFiltersAndSearch = async () => {
-      let filteredProducts = [...allProducts];
-
-      if (filters.inStock || filters.outOfStock) {
-        filteredProducts = filteredProducts.filter(p => {
-          const isInStock = parseInt(p.totalStock) > 0;
-          return (filters.inStock && isInStock) || (filters.outOfStock && !isInStock) || (!filters.inStock && !filters.outOfStock);
-        });
-      }
-
-      if (filters.poshak || filters.accessories || filters.pujaItems) {
-        filteredProducts = filteredProducts.filter(p => {
-          const categoryMatch = (filters.poshak && p.category === 'Poshak') ||
-            (filters.accessories && p.category === 'Accessories') ||
-            (filters.pujaItems && p.category === 'Puja Items');
-          return categoryMatch || (!filters.poshak && !filters.accessories && !filters.pujaItems);
-        });
-      }
-
-      if (searchTerm) {
-        filteredProducts = filteredProducts.filter(p =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-
-      setDisplayedProducts(filteredProducts);
-    };
-
     applyFiltersAndSearch();
-  }, [filters, searchTerm, allProducts]);
+  }, [filters, searchTerm, allProducts, sortOrder]);
 
   useEffect(() => {
     if (inView) {
@@ -112,19 +123,37 @@ export function Products({ products, totalItems }: ProductsProps) {
             <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground">{category}</h1>
           </div>
         </section>
+
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4 md:px-6">
+            {/* Sorting Options */}
+            <div className="pb-4 text-right">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1">
+                  <span>Sort by</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[180px]">
+                  <DropdownMenuRadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as 'lowToHigh' | 'highToLow' | 'featured')}>
+                    <DropdownMenuRadioItem value="featured">Featured</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="lowToHigh">Price: Low to High</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="highToLow">Price: High to Low</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 lg:gap-6">
               {displayedProducts.map((product, index) => (
                 <BlurFade key={product.id} delay={0.25 + index * 0.05} inView>
                   <Link href={`/product?id=${product.id}`}>
-                    <ProductCard key={product.id} id={product.id} name={product.name} price={product.price} alt={product.alt} src={product.src} />
+                    <ProductCard key={product.id} id={product.id} name={product.name} price={product.price} alt={product.name} src={product.src} />
                   </Link>
                 </BlurFade>
               ))}
             </div>
             {isFetching && <Spinner className="text-black" size="large" />}
-            <div ref={ref} className="h-16"></div> {/* Sentinel element */}
+
+            <div ref={ref} className="h-16"></div>
           </div>
         </section>
       </main>

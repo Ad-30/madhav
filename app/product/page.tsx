@@ -5,31 +5,17 @@ import { getIndividualProduct } from "@/actions/getIndividualProduct";
 import { useSearchParams } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import { CartProvider } from "@/contexts/CartContext";
+import { ProductProps } from "@/props/ProductProps";
 
-interface ProductProps {
-    _id: string;
-    productId: string;
-    name: string;
-    description: string;
-    price: Record<string, number>;
-    category: string;
-    images: string[];
-    sizes: string[];
-    stockLevels: Map<string, number>;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-}
 
 const Page = () => {
     const [product, setProduct] = useState<ProductProps | null>(null);
     const searchParams = useSearchParams();
-    const id = searchParams.get('id') || '2N5PJKATOI'; // Default ID for testing
+    const id = searchParams.get('id') || '';
 
     const fetchProduct = async () => {
         try {
             const productFetched = await getIndividualProduct({ id });
-            console.log(productFetched)
 
             // Check if the product data exists
             if (productFetched && productFetched.data) {

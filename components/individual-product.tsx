@@ -104,6 +104,7 @@ export function IndividualProduct({ product }: ProductState) {
                       height={600}
                       className="w-full h-full object-cover"
                       style={{ aspectRatio: "600/600", objectFit: "contain" }}
+                      priority
                     />
                   </CarouselItem>
                 ))}

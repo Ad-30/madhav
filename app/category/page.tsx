@@ -3,6 +3,7 @@ import { Products } from "@/components/products";
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { getProducts } from "@/actions/getProducts";
+import { NotAvailable } from "@/components/not-available";
 
 interface Product {
     src: string;
@@ -24,6 +25,9 @@ const Page = () => {
         const response = await getProducts({ offset: 0, limit: 8, category });
         setProducts(response.data);
         setTotalItems(response.totalItems);
+        if (totalItems === 0) {
+            return <NotAvailable />;
+        }
         // console.log(response);
     };
 
@@ -33,6 +37,7 @@ const Page = () => {
 
     return (
         <>
+
             <Products products={products} totalItems={totalItems} />
         </>
     );
