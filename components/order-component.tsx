@@ -16,7 +16,7 @@ interface Product {
   size: string;
   currentPrice: number;
   quantity: number;
-  imageUrl?: string; // Add this field to store the image URL
+  imageUrl?: string;
 }
 interface Order {
   orderId: string;

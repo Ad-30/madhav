@@ -113,6 +113,16 @@ export function Checkout() {
       setIsCreatingOrder(false);
       return;
     }
+    if (!contactNumber) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Contact number is required!",
+        duration: 2000,
+      });
+      setIsCreatingOrder(false);
+      return;
+    }
 
     if (!streetAddress) {
       toast({
@@ -291,7 +301,7 @@ export function Checkout() {
                 <Input id="pincode" placeholder="Enter your pincode/ZIP code" />
               </div> */}
               <div className="grid gap-2">
-                <Label htmlFor="mobile">Contact no.</Label>
+                <Label htmlFor="mobile">Contact no.<span className="text-red-600">*</span></Label>
                 <Input id="mobile no." type="number" placeholder="Enter your mobile no." onChange={(event) => setContactNumber(String(event.target.value))} />
               </div>
               <div className="grid gap-2">

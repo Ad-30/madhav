@@ -30,7 +30,7 @@ export function Products({ products, totalItems }: ProductsProps) {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>(products);
   const [offset, setOffset] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
-  const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow' | 'featured' | ''>(''); // Updated sortOrder with 'featured'
+  const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow' | 'featured' | ''>('featured');
   const [filters, setFilters] = useState({
     inStock: false,
     outOfStock: false,

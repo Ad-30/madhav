@@ -9,11 +9,12 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useEffect, useState } from "react";
 import Cookie from 'js-cookie';
-import { useToast } from "@/components/ui/use-toast";
 import { Spinner } from "@/components/ui/spinner";
 import { useCart } from "@/contexts/CartContext";
 import { ProductProps } from "@/props/ProductProps";
 import Image from "next/image";
+import { toast } from "@/components/ui/use-toast";
+
 
 
 interface CartCookieItem {
@@ -27,7 +28,6 @@ interface ProductState {
 }
 
 export function IndividualProduct({ product }: ProductState) {
-  const { toast } = useToast();
   const [productDisplay, setProductDisplay] = useState<ProductProps>(product);
   const [selectedSize, setSelectedSize] = useState<string>("m");
   const [selectedQuantity, setSelectedQuantity] = useState<string>("1");
@@ -77,6 +77,7 @@ export function IndividualProduct({ product }: ProductState) {
       title: 'Added to Cart',
       description: `${productDisplay.name} (${selectedSize}) x ${selectedQuantity} added to cart.`,
       duration: 2000,
+      variant: "success",
     });
 
     setIsAddingToCart(false);
